@@ -156,20 +156,24 @@ class DCGAN(object):
         else:
             print(" [!] Load failed...")
 
-        for epoch in xrange(config.epoch):
+        #for epoch in xrange(config.epoch):
+        for epoch in xrange(1):
             if config.dataset == 'mnist':
                 batch_idxs = min(len(data_X), config.train_size) // config.batch_size
             else:            
                 data = glob(os.path.join("./data", config.dataset, "*.jpg"))
                 batch_idxs = min(len(data), config.train_size) // config.batch_size
 
-            for idx in xrange(0, batch_idxs):
+            #for idx in xrange(0, batch_idxs):
+            for idx in xrange(0, 1):
                 if config.dataset == 'mnist':
                     batch_images = data_X[idx*config.batch_size:(idx+1)*config.batch_size]
                     batch_labels = data_y[idx*config.batch_size:(idx+1)*config.batch_size]
                 else:
                     batch_files = data[idx*config.batch_size:(idx+1)*config.batch_size]
                     batch = [get_image(batch_file, self.image_size, is_crop=self.is_crop, resize_w=self.output_size, is_grayscale = self.is_grayscale) for batch_file in batch_files]
+                    pstr('1 batch_files',batch_files)
+                    pstr('2 batch',batch)
                     if (self.is_grayscale):
                         batch_images = np.array(batch).astype(np.float32)[:, :, :, None]
                     else:
@@ -183,11 +187,13 @@ class DCGAN(object):
                     _, summary_str = self.sess.run([d_optim, self.d_sum],
                         feed_dict={ self.images: batch_images, self.z: batch_z, self.y:batch_labels })
                     self.writer.add_summary(summary_str, counter)
+                    pstr('3.1D feed_dict',feed_dict)
 
                     # Update G network
                     _, summary_str = self.sess.run([g_optim, self.g_sum],
                         feed_dict={ self.z: batch_z, self.y:batch_labels })
                     self.writer.add_summary(summary_str, counter)
+                    pstr('3.2G feed_dict',feed_dict)
 
                     # Run g_optim twice to make sure that d_loss does not go to zero (different from paper)
                     _, summary_str = self.sess.run([g_optim, self.g_sum],
@@ -202,11 +208,13 @@ class DCGAN(object):
                     _, summary_str = self.sess.run([d_optim, self.d_sum],
                         feed_dict={ self.images: batch_images, self.z: batch_z })
                     self.writer.add_summary(summary_str, counter)
+                    pstr('4.1D feed_dict',feed_dict)
 
                     # Update G network
                     _, summary_str = self.sess.run([g_optim, self.g_sum],
                         feed_dict={ self.z: batch_z })
                     self.writer.add_summary(summary_str, counter)
+                    pstr('4.2D feed_dict',feed_dict)
 
                     # Run g_optim twice to make sure that d_loss does not go to zero (different from paper)
                     _, summary_str = self.sess.run([g_optim, self.g_sum],

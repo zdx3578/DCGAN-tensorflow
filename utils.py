@@ -14,6 +14,18 @@ pp = pprint.PrettyPrinter()
 
 get_stddev = lambda x, k_h, k_w: 1/math.sqrt(k_w*k_h*x.get_shape()[-1])
 
+
+def pshape(string,x):
+  print ("Shape: of '%s' is %s " % (string,x.shape,))
+  
+def pstr(string,x):
+  print ("STR: '%s' is %s " % (string,x,))
+
+def pall(string,x):
+  pstr(string,x)
+  pshape(string,x)
+
+
 def get_image(image_path, image_size, is_crop=True, resize_w=64, is_grayscale = False):
     return transform(imread(image_path, is_grayscale), image_size, is_crop, resize_w)
 
