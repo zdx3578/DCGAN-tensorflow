@@ -165,7 +165,7 @@ class DCGAN(object):
             else:            
                 data = glob(os.path.join("./data", config.dataset, "*.jpg"))
                 batch_idxs = min(len(data), config.train_size) // config.batch_size
-                pstr('01 data',data)
+                #pstr('01 data',data)
                 pstr('02 batch_idxs',batch_idxs)
 
             #for idx in xrange(0, batch_idxs):
@@ -212,13 +212,13 @@ class DCGAN(object):
                     _, summary_str = self.sess.run([d_optim, self.d_sum],
                         feed_dict={ self.images: batch_images, self.z: batch_z })
                     self.writer.add_summary(summary_str, counter)
-                    pstr('4.1D feed_dict',feed_dict)
+                    pstr('4.1D feed_dict { self.images: batch_images, self.z: batch_z }',{ self.images: batch_images, self.z: batch_z })
 
                     # Update G network
                     _, summary_str = self.sess.run([g_optim, self.g_sum],
                         feed_dict={ self.z: batch_z })
                     self.writer.add_summary(summary_str, counter)
-                    pstr('4.2D feed_dict',feed_dict)
+                    pstr('4.2D feed_dict { self.z: batch_z }',{ self.z: batch_z })
 
                     # Run g_optim twice to make sure that d_loss does not go to zero (different from paper)
                     _, summary_str = self.sess.run([g_optim, self.g_sum],
