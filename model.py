@@ -143,6 +143,8 @@ class DCGAN(object):
         else:
             sample_files = data[0:self.sample_size]
             sample = [get_image(sample_file, self.image_size, is_crop=self.is_crop, resize_w=self.output_size, is_grayscale = self.is_grayscale) for sample_file in sample_files]
+            pstr('001 sample_files',sample_files)
+            pstr('002 sample',sample)
             if (self.is_grayscale):
                 sample_images = np.array(sample).astype(np.float32)[:, :, :, None]
             else:
