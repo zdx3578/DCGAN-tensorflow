@@ -163,6 +163,8 @@ class DCGAN(object):
             else:            
                 data = glob(os.path.join("./data", config.dataset, "*.jpg"))
                 batch_idxs = min(len(data), config.train_size) // config.batch_size
+                pstr('01 data',data)
+                pstr('02 batch_idxs',batch_idxs)
 
             #for idx in xrange(0, batch_idxs):
             for idx in xrange(0, 1):
